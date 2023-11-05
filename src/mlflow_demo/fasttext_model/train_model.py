@@ -28,7 +28,7 @@ class FastTextMLFModel(mlflow.pyfunc.PythonModel):
         self.params = params
 
     def load_context(self, context):
-        self.model = fasttext.load_model(self.params["model_location"])
+        self.model = fasttext.load_model(context.artifacts["model_path"])
 
     def clear_context(self):
         self.model = None
@@ -141,7 +141,7 @@ if __name__ == "__main__":
         "lr": 0.3,
         "dim": 30,
         "ws": 5,
-        "epoch": 100,
+        "epoch": 1,
         "minCount": 6,
         "minCountLabel": 1,
         "minn": 3,
@@ -192,7 +192,10 @@ if __name__ == "__main__":
         fasttextMLF.clear_context()
 
         mlflow.pyfunc.log_model(
-            artifact_path="model", python_model=fasttextMLF, signature=signature
+            artifact_path="model",
+            python_model=fasttextMLF,
+            signature=signature,
+            artifacts={"model_path": parameters["model_location"]},
         )
 
         mlflow.log_artifact(local_path=TRAIN_DATASET_PATH)

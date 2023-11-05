@@ -11,4 +11,4 @@ generate-dockerfile:
 	MLFLOW_TRACKING_URI="http://127.0.0.1:9911" mlflow models generate-dockerfile -d docker -m "models:/gpt_detector/Production"
 
 call_served_model:
-	curl http://127.0.0.1:5455
+	./call_model.sh
